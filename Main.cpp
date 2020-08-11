@@ -2,6 +2,8 @@
 #include <vector>
 #include <algorithm>
 
+namespace ScriptEx {
+
 /**
  * メソッド追加用
  */
@@ -745,6 +747,11 @@ ScriptsExAdd::safeEvalStorage(tTJSVariant *result,
 
 	return TJS_S_OK;
 }
+
+};
+
+using ScriptsExAdd = ScriptEx::ScriptsExAdd;
+
 //----------------------------------------------------------------------
 NCB_ATTACH_CLASS(ScriptsExAdd, Scripts) {
 	RawCallback(TJS_W("getObjectKeys"), &ScriptsExAdd::getKeys, TJS_STATICMEMBER);
