@@ -1,4 +1,4 @@
-#include "ncbind/ncbind.hpp"
+#include "ncbind.hpp"
 #include <vector>
 #include <algorithm>
 
@@ -358,17 +358,17 @@ ScriptsAdd::equalStruct(tTJSVariant v1, tTJSVariant v2)
 		tTJSVariantClosure &o2 = v2.AsObjectClosureNoAddRef();
 
 		// 関数どうしなら特別扱いで関数比較
-		if (o1.IsInstanceOf(0, NULL, NULL, L"Function", NULL)== TJS_S_TRUE
-			&& o2.IsInstanceOf(0, NULL, NULL, L"Function", NULL)== TJS_S_TRUE)
+		if (o1.IsInstanceOf(0, NULL, NULL, TJS_W("Function"), NULL)== TJS_S_TRUE
+			&& o2.IsInstanceOf(0, NULL, NULL, TJS_W("Function"), NULL)== TJS_S_TRUE)
 			return v1.DiscernCompare(v2);
 
 		// Arrayどうしなら全項目を比較
-		if (o1.IsInstanceOf(0, NULL, NULL, L"Array", NULL)== TJS_S_TRUE
-			&& o2.IsInstanceOf(0, NULL, NULL, L"Array", NULL)== TJS_S_TRUE) {
+		if (o1.IsInstanceOf(0, NULL, NULL, TJS_W("Array"), NULL)== TJS_S_TRUE
+			&& o2.IsInstanceOf(0, NULL, NULL, TJS_W("Array"), NULL)== TJS_S_TRUE) {
 			// 長さが一致していなければ比較失敗
 			tTJSVariant o1Count, o2Count;
-			(void)o1.PropGet(0, L"count", &countHint, &o1Count, NULL);
-			(void)o2.PropGet(0, L"count", &countHint, &o2Count, NULL);
+			(void)o1.PropGet(0, TJS_W("count"), &countHint, &o1Count, NULL);
+			(void)o2.PropGet(0, TJS_W("count"), &countHint, &o2Count, NULL);
 			if (! o1Count.DiscernCompare(o2Count))
 				return false;
 			// 全項目を順番に比較
@@ -384,8 +384,8 @@ ScriptsAdd::equalStruct(tTJSVariant v1, tTJSVariant v2)
 		}
 
 		// Dictionaryどうしなら全項目を比較
-		if (o1.IsInstanceOf(0, NULL, NULL, L"Dictionary", NULL)== TJS_S_TRUE
-			&& o2.IsInstanceOf(0, NULL, NULL, L"Dictionary", NULL)== TJS_S_TRUE) {
+		if (o1.IsInstanceOf(0, NULL, NULL, TJS_W("Dictionary"), NULL)== TJS_S_TRUE
+			&& o2.IsInstanceOf(0, NULL, NULL, TJS_W("Dictionary"), NULL)== TJS_S_TRUE) {
 			// キー一覧が一致してなければ比較失敗
 			tTJSVariant k1, k2;
 			_getKeys(&k1, v1);
@@ -421,17 +421,17 @@ ScriptsAdd::equalStructNumericLoose(tTJSVariant v1, tTJSVariant v2)
 		tTJSVariantClosure &o2 = v2.AsObjectClosureNoAddRef();
 
 		// 関数どうしなら特別扱いで関数比較
-		if (o1.IsInstanceOf(0, NULL, NULL, L"Function", NULL)== TJS_S_TRUE
-			&& o2.IsInstanceOf(0, NULL, NULL, L"Function", NULL)== TJS_S_TRUE)
+		if (o1.IsInstanceOf(0, NULL, NULL, TJS_W("Function"), NULL)== TJS_S_TRUE
+			&& o2.IsInstanceOf(0, NULL, NULL, TJS_W("Function"), NULL)== TJS_S_TRUE)
 			return v1.DiscernCompare(v2);
 
 		// Arrayどうしなら全項目を比較
-		if (o1.IsInstanceOf(0, NULL, NULL, L"Array", NULL)== TJS_S_TRUE
-			&& o2.IsInstanceOf(0, NULL, NULL, L"Array", NULL)== TJS_S_TRUE) {
+		if (o1.IsInstanceOf(0, NULL, NULL, TJS_W("Array"), NULL)== TJS_S_TRUE
+			&& o2.IsInstanceOf(0, NULL, NULL, TJS_W("Array"), NULL)== TJS_S_TRUE) {
 			// 長さが一致していなければ比較失敗
 			tTJSVariant o1Count, o2Count;
-			(void)o1.PropGet(0, L"count", &countHint, &o1Count, NULL);
-			(void)o2.PropGet(0, L"count", &countHint, &o2Count, NULL);
+			(void)o1.PropGet(0, TJS_W("count"), &countHint, &o1Count, NULL);
+			(void)o2.PropGet(0, TJS_W("count"), &countHint, &o2Count, NULL);
 			if (! o1Count.DiscernCompare(o2Count))
 				return false;
 			// 全項目を順番に比較
@@ -447,8 +447,8 @@ ScriptsAdd::equalStructNumericLoose(tTJSVariant v1, tTJSVariant v2)
 		}
 
 		// Dictionaryどうしなら全項目を比較
-		if (o1.IsInstanceOf(0, NULL, NULL, L"Dictionary", NULL)== TJS_S_TRUE
-			&& o2.IsInstanceOf(0, NULL, NULL, L"Dictionary", NULL)== TJS_S_TRUE) {
+		if (o1.IsInstanceOf(0, NULL, NULL, TJS_W("Dictionary"), NULL)== TJS_S_TRUE
+			&& o2.IsInstanceOf(0, NULL, NULL, TJS_W("Dictionary"), NULL)== TJS_S_TRUE) {
 			// 項目数が一致していなければ比較失敗
 			tjs_int o1Count, o2Count;
 			(void)o1.GetCount(&o1Count, NULL, NULL, NULL);
@@ -494,7 +494,7 @@ ScriptsAdd::foreach(tTJSVariant *result,
 	}
 
 	// 配列の場合
-	if (obj.IsInstanceOf(0, NULL, NULL, L"Array", NULL)== TJS_S_TRUE) {
+	if (obj.IsInstanceOf(0, NULL, NULL, TJS_W("Array"), NULL)== TJS_S_TRUE) {
 
 		tTJSVariant key, value;
 		tTJSVariant **paramList = new tTJSVariant *[numparams];
@@ -504,7 +504,7 @@ ScriptsAdd::foreach(tTJSVariant *result,
 			paramList[i] = param[i];
 
 		tTJSVariant arrayCount;
-		(void)obj.PropGet(0, L"count", &countHint, &arrayCount, NULL);
+		(void)obj.PropGet(0, TJS_W("count"), &countHint, &arrayCount, NULL);
 		tjs_int count = arrayCount;
 
 		tTJSVariant breakResult;
@@ -564,7 +564,8 @@ ScriptsAdd::getMD5HashString(tTJSVariant *result,
 	tjs_uint8 buffer[16];
 	TVP_md5_finish(&st, buffer);
 
-	tjs_char ret[32+1], *hex = TJS_W("0123456789abcdef");
+	tjs_char ret[32+1];
+	const tjs_char *hex = TJS_W("0123456789abcdef");
 	for (tjs_int i=0; i<16; i++) {
 		ret[i*2  ] = hex[(buffer[i] >> 4) & 0xF];
 		ret[i*2+1] = hex[(buffer[i]     ) & 0xF];
@@ -611,10 +612,10 @@ ScriptsAdd::clone(tTJSVariant obj)
 		tTJSVariantClosure &o1 = obj.AsObjectClosureNoAddRef();
 		
 		// Arrayの複製
-		if (o1.IsInstanceOf(0, NULL, NULL, L"Array", NULL)== TJS_S_TRUE) {
+		if (o1.IsInstanceOf(0, NULL, NULL, TJS_W("Array"), NULL)== TJS_S_TRUE) {
 			iTJSDispatch2 *array = TJSCreateArrayObject();
 			tTJSVariant o1Count;
-			(void)o1.PropGet(0, L"count", &countHint, &o1Count, NULL);
+			(void)o1.PropGet(0, TJS_W("count"), &countHint, &o1Count, NULL);
 			tjs_int count = o1Count;
 			tTJSVariant val;
 			tTJSVariant *args[] = {&val};
@@ -630,7 +631,7 @@ ScriptsAdd::clone(tTJSVariant obj)
 		}
 		
 		// Dictionaryの複製
-		if (o1.IsInstanceOf(0, NULL, NULL, L"Dictionary", NULL)== TJS_S_TRUE) {
+		if (o1.IsInstanceOf(0, NULL, NULL, TJS_W("Dictionary"), NULL)== TJS_S_TRUE) {
 			iTJSDispatch2 *dict = TJSCreateDictionaryObject();
 			DictMemberCloneCaller *caller = new DictMemberCloneCaller(dict);
 			tTJSVariantClosure closure(caller);
@@ -644,7 +645,7 @@ ScriptsAdd::clone(tTJSVariant obj)
 		// cloneメソッドの呼び出しに成功すればそれを返す
 		tTJSVariant result;
 		static tjs_uint cloneHint = 0;
-		if (o1.FuncCall(0, L"clone", &cloneHint, &result, 0, NULL, NULL)== TJS_S_TRUE) {
+		if (o1.FuncCall(0, TJS_W("clone"), &cloneHint, &result, 0, NULL, NULL)== TJS_S_TRUE) {
 			return result;
 		}
 	}
